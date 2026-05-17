@@ -10,6 +10,6 @@ void main() {
         child: MaterialApp(home: ComposeScreen()),
       ),
     );
-    expect(find.text('Compose'), findsOneWidget);
+    expect(find.text('New Email'), findsOneWidget);
   });
 }

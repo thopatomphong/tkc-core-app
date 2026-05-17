@@ -40,34 +40,87 @@ class ComposeScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Compose')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
-          TextField(
-            controller: recipientEmail,
-            decoration: const InputDecoration(labelText: 'Recipient email'),
-            keyboardType: TextInputType.emailAddress,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _ComposeHeader(
+              onCancel: () => context.pop(),
+              onSend: send,
+              isSendEnabled: !sending.value,
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: <Widget>[
+                  TextField(
+                    controller: recipientEmail,
+                    decoration: const InputDecoration(labelText: 'Recipient email'),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  TextField(
+                    controller: subject,
+                    decoration: const InputDecoration(labelText: 'Subject'),
+                  ),
+                  TextField(
+                    controller: body,
+                    minLines: 8,
+                    maxLines: 12,
+                    decoration: const InputDecoration(labelText: 'Message'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ComposeHeader extends StatelessWidget {
+  const _ComposeHeader({
+    required this.onCancel,
+    required this.onSend,
+    required this.isSendEnabled,
+  });
+
+  final VoidCallback onCancel;
+  final VoidCallback onSend;
+  final bool isSendEnabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFEEEEEE))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton(
+            onPressed: onCancel,
+            child: const Text(
+              '< Cancel',
+              style: TextStyle(color: Color(0xFFFF3B30), fontSize: 17),
+            ),
           ),
-          TextField(
-            controller: subject,
-            decoration: const InputDecoration(labelText: 'Subject'),
+          const Text(
+            'New Email',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
-          TextField(
-            controller: body,
-            minLines: 8,
-            maxLines: 12,
-            decoration: const InputDecoration(labelText: 'Message'),
+          ElevatedButton.icon(
+            onPressed: isSendEnabled ? onSend : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFE53935),
+              foregroundColor: Colors.white,
+              disabledBackgroundColor: Colors.grey[300],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            icon: const Icon(Icons.send, size: 16),
+            label: const Text('Send'),
           ),
         ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: FilledButton.icon(
-          onPressed: sending.value ? null : send,
-          icon: const Icon(Icons.send),
-          label: const Text('Send'),
-        ),
       ),
     );
   }
