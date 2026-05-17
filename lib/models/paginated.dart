@@ -17,4 +17,11 @@ class Paginated<T> {
           .toList(),
     );
   }
+
+  Paginated<R> map<R>(R Function(T) mapper) {
+    return Paginated<R>(
+      total: total,
+      items: items.map(mapper).toList(),
+    );
+  }
 }
