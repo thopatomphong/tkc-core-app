@@ -31,7 +31,7 @@ class HomeHeader extends ConsumerWidget {
                   ),
                 ),
                 loading: () => const Text('...'),
-                error: (_, __) => const Text('User'),
+                error: (_, _) => const Text('User'),
               ),
             ],
           ),
@@ -40,10 +40,15 @@ class HomeHeader extends ConsumerWidget {
             child: CircleAvatar(
               radius: 22,
               backgroundColor: const Color(0xFFD32F2F),
-              child: profile.when(
+              child: profile.maybeWhen(
                 data: (user) => Text(
-                  (user.displayName ?? user.username).substring(0, 1).toUpperCase(),
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  (user.displayName ?? user.username)
+                      .substring(0, 1)
+                      .toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 orElse: () => const Icon(Icons.person, color: Colors.white),
               ),
