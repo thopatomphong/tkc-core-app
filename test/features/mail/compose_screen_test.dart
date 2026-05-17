@@ -11,5 +11,6 @@ void main() {
       ),
     );
     expect(find.text('New Email'), findsOneWidget);
+    expect(find.text('To:'), findsOneWidget);
   });
 }

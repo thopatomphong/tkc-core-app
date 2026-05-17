@@ -9,7 +9,7 @@ class ComposeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recipientEmail = useTextEditingController();
+    final recipients = useState(<String>[]);
     final subject = useTextEditingController();
     final body = useTextEditingController();
     final sending = useState(false);
@@ -20,7 +20,7 @@ class ComposeScreen extends HookConsumerWidget {
         await ref
             .read(mailRepositoryProvider)
             .sendEmail(
-              recipientEmails: [recipientEmail.text.trim()],
+              recipientEmails: recipients.value,
               subject: subject.text.trim(),
               body: body.text.trim(),
             );
@@ -46,17 +46,13 @@ class ComposeScreen extends HookConsumerWidget {
             _ComposeHeader(
               onCancel: () => context.pop(),
               onSend: send,
-              isSendEnabled: !sending.value,
+              isSendEnabled: recipients.value.isNotEmpty && !sending.value,
             ),
+            _RecipientSection(recipients: recipients),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: <Widget>[
-                  TextField(
-                    controller: recipientEmail,
-                    decoration: const InputDecoration(labelText: 'Recipient email'),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
                   TextField(
                     controller: subject,
                     decoration: const InputDecoration(labelText: 'Subject'),
@@ -119,6 +115,69 @@ class _ComposeHeader extends StatelessWidget {
             ),
             icon: const Icon(Icons.send, size: 16),
             label: const Text('Send'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RecipientSection extends HookWidget {
+  const _RecipientSection({required this.recipients});
+  final ValueNotifier<List<String>> recipients;
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = useTextEditingController();
+    
+    void addRecipient(String value) {
+      final email = value.trim().replaceAll(',', '').replaceAll(' ', '');
+      if (email.isNotEmpty && !recipients.value.contains(email)) {
+        recipients.value = [...recipients.value, email];
+      }
+      controller.clear();
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFEEEEEE))),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 12),
+            child: Text('To:', style: TextStyle(color: Color(0xFF8E8E93), fontSize: 16)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                ...recipients.value.map((email) => InputChip(
+                  label: Text(email),
+                  backgroundColor: const Color(0xFFEEF2F7),
+                  onDeleted: () {
+                    recipients.value = recipients.value.where((e) => e != email).toList();
+                  },
+                )),
+                IntrinsicWidth(
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(border: InputBorder.none),
+                    onChanged: (val) {
+                      if (val.endsWith(',') || val.endsWith(' ')) {
+                        addRecipient(val);
+                      }
+                    },
+                    onSubmitted: addRecipient,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
