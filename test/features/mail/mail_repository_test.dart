@@ -36,21 +36,21 @@ void main() {
     },
   );
 
-  test('sendEmail posts recipientEmail to /email', () async {
+  test('sendEmail posts recipientEmails to /email', () async {
     final dio = Dio(BaseOptions(baseUrl: 'http://test'));
     final adapter = DioAdapter(dio: dio);
     adapter.onPost(
       '/email',
       (server) => server.reply(201, _emailJson(7)),
       data: <String, dynamic>{
-        'recipientEmail': 'user2@mock.com',
+        'recipientEmails': ['user2@mock.com'],
         'subject': 'Hello',
         'body': 'Hi there!',
       },
     );
 
     final sent = await MailRepository(dio).sendEmail(
-      recipientEmail: 'user2@mock.com',
+      recipientEmails: ['user2@mock.com'],
       subject: 'Hello',
       body: 'Hi there!',
     );

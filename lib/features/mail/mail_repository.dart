@@ -21,14 +21,14 @@ class MailRepository {
   }
 
   Future<EmailMessage> sendEmail({
-    required String recipientEmail,
+    required List<String> recipientEmails,
     required String subject,
     required String body,
   }) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/email',
       data: <String, dynamic>{
-        'recipientEmail': recipientEmail,
+        'recipientEmails': recipientEmails,
         'subject': subject,
         'body': body,
       },
