@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:brainstorming:*)",
+      "Bash(rtk read *)",
+      "Skill(superpowers:writing-plans)",
+      "Skill(superpowers:writing-plans:*)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:subagent-driven-development:*)",
+      "Bash(rtk git *)",
+      "Bash(flutter test *)",
+      "Bash(flutter analyze *)",
+      "Bash(dart analyze *)",
+      "Bash(flutter pub *)",
+      "Bash(xargs ls -la)",
+      "Bash(rtk tree *)",
+      "Bash(cat)",
+      "Read(//tmp/**)",
+      "Bash(xargs cat)",
+      "Skill(superpowers:test-driven-development)",
+      "Skill(superpowers:test-driven-development:*)",
+      "Bash(dart run *)",
+      "Bash(dart format *)",
+      "Bash(git checkout *)"
+    ]
+  }
+}

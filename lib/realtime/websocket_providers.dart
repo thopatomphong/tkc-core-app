@@ -1,6 +1,6 @@
 import 'package:core_app/core/env/env.dart';
 import 'package:core_app/core/providers.dart';
-import 'package:core_app/features/mail/mail_providers.dart';
+import 'package:core_app/features/mail/presentation/providers/mail_providers.dart';
 import 'package:core_app/models/online_user.dart';
 import 'package:core_app/realtime/websocket_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

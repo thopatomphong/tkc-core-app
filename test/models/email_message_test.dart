@@ -1,8 +1,8 @@
-import 'package:core_app/models/email_message.dart';
+import 'package:core_app/features/mail/data/dtos/email_message_dto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('EmailMessage parses the inbox item shape', () {
+  test('EmailMessageDto parses inbox item shape and maps to entity', () {
     final json = <String, dynamic>{
       'id': 1,
       'senderId': 0,
@@ -13,9 +13,15 @@ void main() {
       'body': 'Hello!',
       'createdAt': '2026-03-05T04:30:00.000Z',
     };
-    final email = EmailMessage.fromJson(json);
-    expect(email.id, 1);
-    expect(email.senderUsername, 'system');
-    expect(email.createdAt.year, 2026);
+
+    final dto = EmailMessageDto.fromJson(json);
+    expect(dto.id, 1);
+    expect(dto.senderUsername, 'system');
+    expect(dto.createdAt.year, 2026);
+
+    final entity = dto.toEntity();
+    expect(entity.id, 1);
+    expect(entity.senderUsername, 'system');
+    expect(entity.subject, 'Test Push');
   });
 }

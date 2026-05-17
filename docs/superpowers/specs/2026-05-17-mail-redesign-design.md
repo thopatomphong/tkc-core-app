@@ -1,52 +1,61 @@
-# Design Spec: Inbox Redesign
+# Design Spec: Mail Detail Redesign
 
-Implementing a high-fidelity, tabbed inbox interface with a modern layout, specialized avatars, and a recipient-focused sent mail view.
+**Date:** 2026-05-17
+**Status:** Pending Review
 
-## 1. Overview
-The current `InboxScreen` is a simple list. This redesign transforms it into a professional mail portal matching the provided mockup, featuring a large header, a red compose action, and a segmented toggle for Inbox/Sent views.
+## Overview
+Redesign the `EmailDetailScreen` to match a specific "Order Receipt" mockup. The screen will transition from a standard list-based layout to a more polished, componentized UI with a structured receipt card.
 
-## 2. UI Components
+## Goals
+- Modernize the Mail Detail view.
+- Implement a visually distinct "Receipt Card" for order-related emails.
+- Ensure the UI matches the provided mockup precisely (static implementation for now).
 
-### 2.1. `InboxScreen` (Container)
-- **Header**: Large "Inbox" title (32pt, Bold).
-- **Compose Button**: Circular FAB (Material Red `#F44336`) with a white edit icon, positioned in the top right.
-- **Tab Bar**: A custom segmented control styled toggle.
-    - Background: Light grey `#F1F3F9`.
-    - Active State: White card with soft shadow.
-    - Labels: "Inbox" and "Sent".
-- **Body**: `TabBarView` to switch between `MailListView` instances.
+## Architecture & Components
 
-### 2.2. `MailListView` (Reusable List)
-- Hosts the `RefreshIndicator` and `ListView.builder`.
-- Takes a `Provider` and a `bool isSentMode`.
-- Handles loading/error states using standard project patterns.
+The screen will be broken down into the following private widgets within `lib/features/mail/email_detail_screen.dart`:
 
-### 2.3. `EmailTile` (Atomic Widget)
-- **Leading**: `CircleAvatar`
-    - Initials: 2 characters (e.g., "U2" or "S").
-    - Background: Generated from `username.hashCode` using a curated palette.
-- **Top Row**: 
-    - Name (Bold, 16pt).
-    - Timestamp (Grey, 13pt, right-aligned, e.g., "Just now", "2m ago").
-- **Subject**: Bold, 15pt, max 1 line with ellipsis.
-- **Body Preview**: Grey, 14pt, max 1 line with ellipsis.
-- **Layout**: 16px vertical padding, 20px horizontal padding.
+### 1. `_EmailHeader`
+- **Purpose:** Displays the email subject and sender information.
+- **Styling:**
+  - Subject: `Theme.of(context).textTheme.headlineMedium` (Bold, black).
+  - Sender Row: Custom row with:
+    - `CircleAvatar`: Background color `Colors.redAccent`, white text.
+    - `Column`: Sender name (bold) and "To: [recipient] · [time]" (gray, smaller).
 
-## 3. Data Flow
-- **Inbox Tab**: Watches `inboxProvider`. Displays `senderUsername`.
-- **Sent Tab**: Watches `sentMailProvider`. Displays `recipientUsername` (prefixed with "To: ").
-- **Navigation**:
-    - Tap Tile -> `context.go('/mail/${email.id}')`.
-    - Tap Compose -> `context.go('/mail/compose')`.
+### 2. `_ReceiptCard`
+- **Purpose:** The main content area showing order details.
+- **Styling:**
+  - Background: `Color(0xFFF8F9FA)` (Light gray).
+  - Border Radius: `12.0`.
+  - Padding: `EdgeInsets.all(20)`.
+- **Internal Sections:**
+  - **Title:** Centered `Row` with "🧾 Order Receipt" text.
+  - **Divider:** A thin horizontal line.
+  - **Line Items:** List of `_ReceiptItem` widgets.
+  - **Total:** Bold row with "Total" and price in red (`Color(0xFFE53935)`).
+  - **Timestamp:** Centered `Text` at the bottom (gray, small).
 
-## 4. Technical Details
-- **Colors**:
-    - Avatar Palette: Blue `#1976D2`, Green `#388E3C`, Amber `#FFA000`, Deep Orange `#E64A19`, Purple `#7B1FA2`.
-- **Time Formatting**: Use a utility to convert `DateTime` to relative strings ("2m ago", "1h ago").
+### 3. `_ReceiptItem`
+- **Purpose:** Represents a single line item in the receipt.
+- **Layout:** `Row` with:
+  - `Column` (Left): Item name and quantity (e.g., "× 2").
+  - `Text` (Right): Price.
 
-## 5. Testing Plan
-- **Widget Tests**:
-    - `EmailTile`: Verify avatar initials and color generation.
-    - `EmailTile`: Verify "To: " prefix appears correctly in Sent mode.
-    - `InboxScreen`: Verify tab switching triggers different provider watches.
-    - `InboxScreen`: Verify FAB navigates to compose screen.
+## Design Tokens
+
+| Token | Value |
+|-------|-------|
+| Primary Red | `Color(0xFFE53935)` |
+| Card Background | `Color(0xFFF8F9FA)` |
+| Text Gray | `Colors.grey[600]` |
+| Avatar Color | `Colors.redAccent` |
+
+## Data Flow
+- Currently, the implementation will use **hardcoded data** matching the mockup for the receipt items.
+- The `EmailDetailScreen` will still receive an `emailId` and watch the `emailDetailProvider`, but the body display will be replaced by the static receipt card.
+
+## Verification Plan
+- **Visual Check:** Verify the screen matches `sent_mail_mockup.png` (or the provided reference).
+- **Navigation:** Ensure the "Back" button (Inbox) works correctly.
+- **Responsiveness:** Test on different screen sizes to ensure the card margins and padding look correct.

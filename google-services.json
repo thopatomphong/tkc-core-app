@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "611200100793",
+    "firebase_url": "https://admob-app-id-2686652186.firebaseio.com",
+    "project_id": "admob-app-id-2686652186",
+    "storage_bucket": "admob-app-id-2686652186.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611200100793:android:150032c6caafa240f12e68",
+        "android_client_info": {
+          "package_name": "com.tkc.core_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611200100793-cb1hlpo65bqgp5hnsmc5966marud5h33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz0nofe3m6Yh0Zf8r6fNa21280bASoZK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611200100793-cb1hlpo65bqgp5hnsmc5966marud5h33.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "611200100793-1flu34ako0n2g3qd9a0a7bcmufsdnkig.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "th.co.turbon.TurbonService"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611200100793:android:656b6740f84f4d4a",
+        "android_client_info": {
+          "package_name": "th.co.bncare.bncare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611200100793-bkl48gfak8aarmfblfj5kn0pafgpceme.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "th.co.bncare.bncare",
+            "certificate_hash": "595b113fa214c5ad2d25706e2cb766d499e37690"
+          }
+        },
+        {
+          "client_id": "611200100793-cb1hlpo65bqgp5hnsmc5966marud5h33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz0nofe3m6Yh0Zf8r6fNa21280bASoZK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611200100793-cb1hlpo65bqgp5hnsmc5966marud5h33.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "611200100793-1flu34ako0n2g3qd9a0a7bcmufsdnkig.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "th.co.turbon.TurbonService"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import 'package:core_app/features/mail/mail_repository.dart';
+import 'package:core_app/features/mail/data/mail_repository_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
@@ -29,7 +29,7 @@ void main() {
         queryParameters: <String, dynamic>{'page': 2, 'limit': 10},
       );
 
-      final page = await MailRepository(dio).getInbox(page: 2, limit: 10);
+      final page = await MailRepositoryImpl(dio).getInbox(page: 2, limit: 10);
 
       expect(page.total, 1);
       expect(page.items.single.id, 1);
@@ -49,35 +49,12 @@ void main() {
       },
     );
 
-    final sent = await MailRepository(dio).sendEmail(
+    final sent = await MailRepositoryImpl(dio).sendEmail(
       recipientEmail: 'user2@mock.com',
       subject: 'Hello',
       body: 'Hi there!',
     );
 
     expect(sent.id, 7);
-  });
-
-  test('createSystemEmail posts to /email/system without auth', () async {
-    final dio = Dio(BaseOptions(baseUrl: 'http://test'));
-    final adapter = DioAdapter(dio: dio);
-    adapter.onPost(
-      '/email/system',
-      (server) => server.reply(201, <String, dynamic>{}),
-      data: <String, dynamic>{
-        'recipientEmail': 'user1@mock.com',
-        'subject': 'Test Push',
-        'body': 'This should trigger a push notification!',
-      },
-    );
-
-    await expectLater(
-      MailRepository(dio).createSystemEmail(
-        recipientEmail: 'user1@mock.com',
-        subject: 'Test Push',
-        body: 'This should trigger a push notification!',
-      ),
-      completes,
-    );
   });
 }

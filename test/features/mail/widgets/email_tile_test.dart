@@ -1,5 +1,5 @@
-import 'package:core_app/features/mail/widgets/email_tile.dart';
-import 'package:core_app/models/email_message.dart';
+import 'package:core_app/features/mail/presentation/widgets/email_tile.dart';
+import 'package:core_app/features/mail/domain/entities/email_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

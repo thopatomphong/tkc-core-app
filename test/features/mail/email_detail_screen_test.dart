@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:core_app/features/mail/email_detail_screen.dart';
-import 'package:core_app/features/mail/mail_providers.dart';
-import 'package:core_app/models/email_message.dart';
+import 'package:core_app/features/mail/presentation/screens/email_detail_screen.dart';
+import 'package:core_app/features/mail/presentation/providers/mail_providers.dart';
+import 'package:core_app/features/mail/domain/entities/email_message.dart';
 
 void main() {
   testWidgets('EmailDetailScreen shows basic email info', (tester) async {
