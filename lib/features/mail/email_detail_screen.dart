@@ -75,3 +75,38 @@ class _EmailHeader extends StatelessWidget {
     );
   }
 }
+
+class _ReceiptItem extends StatelessWidget {
+  const _ReceiptItem({
+    required this.name,
+    required this.quantity,
+    required this.price,
+  });
+
+  final String name;
+  final int quantity;
+  final String price;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, style: const TextStyle(fontSize: 14)),
+              Text(
+                '× $quantity',
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+            ],
+          ),
+          Text(price, style: const TextStyle(fontSize: 14)),
+        ],
+      ),
+    );
+  }
+}
