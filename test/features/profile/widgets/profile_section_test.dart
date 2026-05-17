@@ -7,10 +7,7 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: ProfileSection(
-            label: 'ACCOUNT',
-            children: [Text('Child 1')],
-          ),
+          body: ProfileSection(label: 'ACCOUNT', children: [Text('Child 1')]),
         ),
       ),
     );

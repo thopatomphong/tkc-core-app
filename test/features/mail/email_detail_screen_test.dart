@@ -20,12 +20,8 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          emailDetailProvider(1).overrideWith((ref) => message),
-        ],
-        child: const MaterialApp(
-          home: EmailDetailScreen(emailId: 1),
-        ),
+        overrides: [emailDetailProvider(1).overrideWith((ref) => message)],
+        child: const MaterialApp(home: EmailDetailScreen(emailId: 1)),
       ),
     );
 

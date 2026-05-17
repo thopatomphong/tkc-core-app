@@ -17,11 +17,7 @@ class LogoWidget extends StatelessWidget {
         ),
       ),
       child: const Center(
-        child: Icon(
-          Icons.mail,
-          color: Colors.white,
-          size: 40,
-        ),
+        child: Icon(Icons.mail, color: Colors.white, size: 40),
       ),
     );
   }

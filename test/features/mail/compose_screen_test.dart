@@ -6,9 +6,7 @@ import 'package:core_app/features/mail/compose_screen.dart';
 void main() {
   testWidgets('ComposeScreen shows basic fields', (tester) async {
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(home: ComposeScreen()),
-      ),
+      const ProviderScope(child: MaterialApp(home: ComposeScreen())),
     );
     expect(find.text('New Email'), findsOneWidget);
     expect(find.text('To:'), findsOneWidget);

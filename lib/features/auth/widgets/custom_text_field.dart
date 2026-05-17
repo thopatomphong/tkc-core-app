@@ -54,10 +54,7 @@ class CustomTextField extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            style: const TextStyle(
-              color: Color(0xFF1A1A1A),
-              fontSize: 16,
-            ),
+            style: const TextStyle(color: Color(0xFF1A1A1A), fontSize: 16),
           ),
         ),
       ],

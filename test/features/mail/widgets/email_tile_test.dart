@@ -16,7 +16,11 @@ void main() {
       createdAt: DateTime.now(),
     );
 
-    await tester.pumpWidget(MaterialApp(home: Scaffold(body: EmailTile(email: email))));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: EmailTile(email: email)),
+      ),
+    );
     expect(find.text('system'), findsOneWidget);
     expect(find.text('Order Receipt'), findsOneWidget);
   });
@@ -33,7 +37,11 @@ void main() {
       createdAt: DateTime.now(),
     );
 
-    await tester.pumpWidget(MaterialApp(home: Scaffold(body: EmailTile(email: email, isSentMode: true))));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: EmailTile(email: email, isSentMode: true)),
+      ),
+    );
     expect(find.byIcon(Icons.done_all), findsOneWidget);
   });
 }

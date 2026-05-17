@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileSection extends StatelessWidget {
-  const ProfileSection({
-    super.key,
-    this.label,
-    required this.children,
-  });
+  const ProfileSection({super.key, this.label, required this.children});
 
   final String? label;
   final List<Widget> children;
@@ -42,9 +38,7 @@ class ProfileSection extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         ),
         const SizedBox(height: 24),
       ],

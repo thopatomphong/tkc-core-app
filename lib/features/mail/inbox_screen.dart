@@ -11,7 +11,8 @@ class InboxScreen extends ConsumerStatefulWidget {
   ConsumerState<InboxScreen> createState() => _InboxScreenState();
 }
 
-class _InboxScreenState extends ConsumerState<InboxScreen> with SingleTickerProviderStateMixin {
+class _InboxScreenState extends ConsumerState<InboxScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String _title = 'Inbox';
 
@@ -47,7 +48,13 @@ class _InboxScreenState extends ConsumerState<InboxScreen> with SingleTickerProv
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(_title, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                  Text(
+                    _title,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   IconButton(
                     icon: const CircleAvatar(
                       backgroundColor: Color(0xFFF44336),
@@ -64,7 +71,10 @@ class _InboxScreenState extends ConsumerState<InboxScreen> with SingleTickerProv
               child: Container(
                 height: 44,
                 padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(color: const Color(0xFFF1F3F9), borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F3F9),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: TabBar(
                   controller: _tabController,
                   indicatorSize: TabBarIndicatorSize.tab,
@@ -77,13 +87,19 @@ class _InboxScreenState extends ConsumerState<InboxScreen> with SingleTickerProv
                         color: Colors.black.withOpacity(0.05),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
-                      )
+                      ),
                     ],
                   ),
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.grey,
-                  labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                  tabs: const [Tab(text: 'Inbox'), Tab(text: 'Sent')],
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  ),
+                  tabs: const [
+                    Tab(text: 'Inbox'),
+                    Tab(text: 'Sent'),
+                  ],
                 ),
               ),
             ),

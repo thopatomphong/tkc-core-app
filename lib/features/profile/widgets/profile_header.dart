@@ -10,7 +10,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final initials =
         (user.displayName ?? user.username).substring(0, 1).toUpperCase() +
-            (user.id.toString().substring(0, 1)); // Mocking "U1" style
+        (user.id.toString().substring(0, 1)); // Mocking "U1" style
 
     return Center(
       child: Column(
@@ -33,15 +33,9 @@ class ProfileHeader extends StatelessWidget {
             user.displayName ?? user.username,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          Text(
-            '@${user.username}',
-            style: const TextStyle(color: Colors.grey),
-          ),
+          Text('@${user.username}', style: const TextStyle(color: Colors.grey)),
           const SizedBox(height: 4),
-          Text(
-            user.email,
-            style: const TextStyle(color: Colors.blue),
-          ),
+          Text(user.email, style: const TextStyle(color: Colors.blue)),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

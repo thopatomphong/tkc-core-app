@@ -40,9 +40,9 @@ class _EmailHeader extends StatelessWidget {
         Text(
           message.subject,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
         const SizedBox(height: 16),
         Row(

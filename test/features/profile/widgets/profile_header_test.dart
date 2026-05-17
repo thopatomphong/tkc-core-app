@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('ProfileHeader displays user info and status badge', (tester) async {
+  testWidgets('ProfileHeader displays user info and status badge', (
+    tester,
+  ) async {
     final user = Profile(
       id: 1,
       username: 'user1',
@@ -14,9 +16,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        home: Scaffold(
-          body: ProfileHeader(user: user),
-        ),
+        home: Scaffold(body: ProfileHeader(user: user)),
       ),
     );
 

@@ -32,11 +32,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                ProfileSection(
-                  children: [
-                    ProfileHeader(user: user),
-                  ],
-                ),
+                ProfileSection(children: [ProfileHeader(user: user)]),
                 ProfileSection(
                   label: 'ACCOUNT',
                   children: [
@@ -60,14 +56,14 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     const ProfileTile(
                       icon: Icons.notifications,
-                      iconColor: const Color(0xFFFFB300),
+                      iconColor: Color(0xFFFFB300),
                       title: 'Push Notifications',
                       value: 'Enabled',
                     ),
                     const Divider(height: 1, indent: 64),
                     const ProfileTile(
                       icon: Icons.notifications_active,
-                      iconColor: const Color(0xFF1E88E5),
+                      iconColor: Color(0xFF1E88E5),
                       title: 'WebSocket',
                       value: 'Connected',
                     ),
