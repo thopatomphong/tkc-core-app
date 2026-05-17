@@ -1,4 +1,5 @@
 import 'package:core_app/features/mail/mail_providers.dart';
+import 'package:core_app/models/email_message.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,18 +19,59 @@ class EmailDetailScreen extends ConsumerWidget {
         data: (message) => ListView(
           padding: const EdgeInsets.all(16),
           children: <Widget>[
-            Text(
-              message.subject,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            Text('From: ${message.senderUsername}'),
-            Text('To: ${message.recipientUsername}'),
+            _EmailHeader(message: message),
             const Divider(height: 32),
             Text(message.body),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EmailHeader extends StatelessWidget {
+  const _EmailHeader({required this.message});
+  final EmailMessage message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          message.subject,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.redAccent,
+              child: Text(
+                message.senderUsername[0].toUpperCase(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  message.senderUsername,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'To: ${message.recipientUsername} · Just now',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

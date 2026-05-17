@@ -30,6 +30,7 @@ void main() {
     );
 
     expect(find.text('Order #3 Receipt'), findsOneWidget);
-    expect(find.text('From: system'), findsOneWidget);
+    expect(find.byType(CircleAvatar), findsOneWidget);
+    expect(find.text('system'), findsOneWidget);
   });
 }
