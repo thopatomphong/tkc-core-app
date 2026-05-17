@@ -94,10 +94,7 @@ class AuthInterceptor extends Interceptor {
     }
   }
 
-  Future<Response<dynamic>> _retry(
-    RequestOptions options,
-    AuthTokens tokens,
-  ) {
+  Future<Response<dynamic>> _retry(RequestOptions options, AuthTokens tokens) {
     options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
     options.extra['retried'] = true;
     return refreshDio.fetch<dynamic>(options);

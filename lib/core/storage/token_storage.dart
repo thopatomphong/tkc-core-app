@@ -39,9 +39,8 @@ class _MemoryStore implements _KeyValueStore {
 class TokenStorage {
   TokenStorage._(this._store);
 
-  factory TokenStorage() => TokenStorage._(
-        const _SecureStore(FlutterSecureStorage()),
-      );
+  factory TokenStorage() =>
+      TokenStorage._(const _SecureStore(FlutterSecureStorage()));
 
   /// Test-only constructor backed by an in-memory map.
   factory TokenStorage.forTesting(Map<String, String> backing) =>

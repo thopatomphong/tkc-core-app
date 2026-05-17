@@ -7,11 +7,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 AuthTokens _tokens(String access) => AuthTokens(
-      accessToken: access,
-      accessTokenExpiresAt: DateTime.utc(2026, 3, 5, 5),
-      refreshToken: 'refresh-1',
-      refreshTokenExpiresAt: DateTime.utc(2030),
-    );
+  accessToken: access,
+  accessTokenExpiresAt: DateTime.utc(2026, 3, 5, 5),
+  refreshToken: 'refresh-1',
+  refreshTokenExpiresAt: DateTime.utc(2030),
+);
 
 /// A fully-scripted HttpClientAdapter so each request's response is
 /// deterministic — http_mock_adapter cannot vary one route by call count.
@@ -24,8 +24,7 @@ class _ScriptedAdapter implements HttpClientAdapter {
     RequestOptions options,
     Stream<Uint8List>? requestStream,
     Future<void>? cancelFuture,
-  ) =>
-      onFetch(options);
+  ) => onFetch(options);
 
   @override
   void close({bool force = false}) {}
@@ -62,8 +61,7 @@ void main() {
     expect(seenHeader, 'Bearer access-1');
   });
 
-  test('on 401 it refreshes once and retries the original request',
-      () async {
+  test('on 401 it refreshes once and retries the original request', () async {
     final dio = Dio(BaseOptions(baseUrl: 'http://test'));
     var refreshCalls = 0;
     var inboxCalls = 0;
