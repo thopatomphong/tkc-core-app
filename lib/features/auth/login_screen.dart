@@ -1,4 +1,7 @@
 import 'package:core_app/features/auth/auth_controller.dart';
+import 'package:core_app/features/auth/widgets/custom_text_field.dart';
+import 'package:core_app/features/auth/widgets/logo_widget.dart';
+import 'package:core_app/features/auth/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -26,50 +29,73 @@ class LoginScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('TKC Mail')),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 420),
-          child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(24),
-            children: <Widget>[
-              Text(
-                'Sign in',
-                style: Theme.of(context).textTheme.headlineMedium,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 393),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+                  const LogoWidget(),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Mock Mail',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Mail Service & Mini Apps',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF888888),
+                    ),
+                  ),
+                  const SizedBox(height: 80),
+                  CustomTextField(
+                    label: 'Username',
+                    controller: username,
+                    hintText: 'user1',
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    label: 'Password',
+                    controller: password,
+                    obscureText: true,
+                    hintText: '••••••••',
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => submit(),
+                  ),
+                  const SizedBox(height: 32),
+                  PrimaryButton(
+                    onPressed: auth.isLoading ? null : submit,
+                    text: 'Sign In',
+                    isLoading: auth.isLoading,
+                  ),
+                  if (auth.hasError) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      '${auth.error}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  const SizedBox(height: 40),
+                ],
               ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: username,
-                decoration: const InputDecoration(labelText: 'Username'),
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: password,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                onSubmitted: (_) => submit(),
-              ),
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: auth.isLoading ? null : submit,
-                child: auth.isLoading
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text('Login'),
-              ),
-              if (auth.hasError) ...<Widget>[
-                const SizedBox(height: 12),
-                Text(
-                  '${auth.error}',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
-            ],
+            ),
           ),
         ),
       ),
