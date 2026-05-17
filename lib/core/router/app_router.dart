@@ -1,8 +1,10 @@
 import 'package:core_app/features/auth/auth_controller.dart';
 import 'package:core_app/features/auth/login_screen.dart';
+import 'package:core_app/features/launcher/home_screen.dart';
 import 'package:core_app/features/launcher/launcher_screen.dart';
 import 'package:core_app/features/mail/compose_screen.dart';
 import 'package:core_app/features/mail/email_detail_screen.dart';
+import 'package:core_app/features/mail/inbox_screen.dart';
 import 'package:core_app/features/profile/profile_screen.dart';
 import 'package:core_app/integration/concert_host_impl.dart';
 import 'package:core_app/integration/shopping_host_impl.dart';
@@ -17,14 +19,14 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/',
+    initialLocation: '/home',
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
       final isLogin = state.matchedLocation == '/login';
       return auth.maybeWhen(
         data: (loggedIn) {
           if (!loggedIn) return isLogin ? null : '/login';
-          if (isLogin) return '/';
+          if (isLogin) return '/home';
           return null;
         },
         orElse: () => null,
@@ -32,35 +34,61 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     },
     routes: <RouteBase>[
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const LauncherScreen(),
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'profile',
-            builder: (context, state) => const ProfileScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return LauncherScreen(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: 'compose',
-            builder: (context, state) => const ComposeScreen(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/mail',
+                builder: (context, state) => const InboxScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'mail/:id',
+                    builder: (context, state) => EmailDetailScreen(
+                      emailId: int.parse(state.pathParameters['id']!),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          GoRoute(
-            path: 'mail/:id',
-            builder: (context, state) => EmailDetailScreen(
-              emailId: int.parse(state.pathParameters['id']!),
-            ),
-          ),
-          GoRoute(
-            path: 'shopping',
-            builder: (context, state) =>
-                ShoppingMiniApp.create(host: ShoppingHostImpl(ref, context)),
-          ),
-          GoRoute(
-            path: 'concert',
-            builder: (context, state) =>
-                ConcertMiniApp.create(host: ConcertHostImpl(ref, context)),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileScreen(),
+              ),
+            ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/compose',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ComposeScreen(),
+      ),
+      GoRoute(
+        path: '/shopping',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) =>
+            ShoppingMiniApp.create(host: ShoppingHostImpl(ref, context)),
+      ),
+      GoRoute(
+        path: '/concert',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) =>
+            ConcertMiniApp.create(host: ConcertHostImpl(ref, context)),
       ),
     ],
   );
