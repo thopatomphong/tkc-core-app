@@ -1,0 +1,7 @@
+services:
+  mock-server-api:
+    image: docker.io/pirananch/mock-server-api
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./firebase/service-account.json:/app/firebase/service-account.json:ro
