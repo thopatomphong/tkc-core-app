@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, this.onProfileRequested});
-
-  final VoidCallback? onProfileRequested;
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HomeHeader(onAvatarTap: () => onProfileRequested?.call()),
+            HomeHeader(onAvatarTap: () => context.go('/profile')),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
