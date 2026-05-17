@@ -32,5 +32,8 @@ void main() {
     expect(find.text('Order #3 Receipt'), findsOneWidget);
     expect(find.byType(CircleAvatar), findsOneWidget);
     expect(find.text('system'), findsOneWidget);
+    expect(find.text('Apple AirPods'), findsOneWidget);
+    expect(find.text('Apple MagSafe Battery'), findsOneWidget);
+    expect(find.text('฿12,470'), findsOneWidget);
   });
 }
