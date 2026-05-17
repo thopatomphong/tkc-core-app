@@ -13,6 +13,7 @@ class ComposeScreen extends HookConsumerWidget {
     final subject = useTextEditingController();
     final body = useTextEditingController();
     final sending = useState(false);
+    final isFormattingActive = useState(false);
 
     Future<void> send() async {
       sending.value = true;
@@ -49,22 +50,25 @@ class ComposeScreen extends HookConsumerWidget {
               isSendEnabled: recipients.value.isNotEmpty && !sending.value,
             ),
             _RecipientSection(recipients: recipients),
+            _SubjectSection(controller: subject),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: <Widget>[
-                  TextField(
-                    controller: subject,
-                    decoration: const InputDecoration(labelText: 'Subject'),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  controller: body,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Message',
                   ),
-                  TextField(
-                    controller: body,
-                    minLines: 8,
-                    maxLines: 12,
-                    decoration: const InputDecoration(labelText: 'Message'),
-                  ),
-                ],
+                  style: const TextStyle(fontSize: 17),
+                ),
               ),
+            ),
+            _FormattingToolbar(
+              isFormattingActive: isFormattingActive.value,
+              onToggleFormatting: () =>
+                  isFormattingActive.value = !isFormattingActive.value,
             ),
           ],
         ),
@@ -181,6 +185,94 @@ class _RecipientSection extends HookWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SubjectSection extends StatelessWidget {
+  const _SubjectSection({required this.controller});
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFEEEEEE))),
+      ),
+      child: Row(
+        children: [
+          const Text('Subject:', style: TextStyle(color: Color(0xFF8E8E93), fontSize: 16)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: const InputDecoration(border: InputBorder.none),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FormattingToolbar extends StatelessWidget {
+  const _FormattingToolbar({
+    required this.isFormattingActive,
+    required this.onToggleFormatting,
+  });
+
+  final bool isFormattingActive;
+  final VoidCallback onToggleFormatting;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isFormattingActive)
+          Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: const BoxDecoration(
+              color: Color(0xFFFAFAFA),
+              border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
+            ),
+            child: Row(
+              children: [
+                IconButton(onPressed: () {}, icon: const Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
+                IconButton(onPressed: () {}, icon: const Text('I', style: TextStyle(fontStyle: FontStyle.italic))),
+                IconButton(onPressed: () {}, icon: const Text('U', style: TextStyle(decoration: TextDecoration.underline))),
+                const Spacer(),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.list)),
+              ],
+            ),
+          ),
+        Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: onToggleFormatting,
+                icon: Text(
+                  'T',
+                  style: TextStyle(
+                    color: isFormattingActive ? const Color(0xFF007AFF) : Colors.grey,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const IconButton(onPressed: null, icon: Icon(Icons.phone_outlined)),
+              const IconButton(onPressed: null, icon: Icon(Icons.chat_bubble_outline)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

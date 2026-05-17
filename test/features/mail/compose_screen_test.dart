@@ -12,5 +12,7 @@ void main() {
     );
     expect(find.text('New Email'), findsOneWidget);
     expect(find.text('To:'), findsOneWidget);
+    expect(find.text('Subject:'), findsOneWidget);
+    expect(find.text('T'), findsOneWidget);
   });
 }
