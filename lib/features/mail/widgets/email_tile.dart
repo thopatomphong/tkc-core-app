@@ -36,7 +36,15 @@ class EmailTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(formatRelativeTime(email.createdAt), style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                      Row(
+                        children: [
+                          Text(formatRelativeTime(email.createdAt), style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                          if (isSentMode) ...[
+                            const SizedBox(width: 4),
+                            const Icon(Icons.done_all, color: Color(0xFF4CAF50), size: 16),
+                          ],
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 2),
