@@ -59,13 +59,18 @@ class ComposeScreen extends HookConsumerWidget {
                   controller: body,
                   maxLines: null,
                   decoration: const InputDecoration(
-                    hintText: 'Body',
                     border: InputBorder.none,
+                    hintText: 'Message',
                   ),
+                  style: const TextStyle(fontSize: 17),
                 ),
               ),
             ),
-            if (isFormattingActive.value) _FormattingToolbar(bodyController: body),
+            _FormattingToolbar(
+              isFormattingActive: isFormattingActive.value,
+              onToggleFormatting: () =>
+                  isFormattingActive.value = !isFormattingActive.value,
+            ),
           ],
         ),
       ),
@@ -225,46 +230,88 @@ class _SubjectSection extends StatelessWidget {
 }
 
 class _FormattingToolbar extends StatelessWidget {
-  const _FormattingToolbar({required this.bodyController});
+  const _FormattingToolbar({
+    required this.isFormattingActive,
+    required this.onToggleFormatting,
+  });
 
-  final TextEditingController bodyController;
+  final bool isFormattingActive;
+  final VoidCallback onToggleFormatting;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-        color: Color(0xFFFAFAFA),
-        border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
-      ),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Text(
-              'B',
-              style: TextStyle(fontWeight: FontWeight.bold),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isFormattingActive)
+          Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: const BoxDecoration(
+              color: Color(0xFFFAFAFA),
+              border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
+            ),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Text(
+                    'B',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Text(
+                    'I',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Text(
+                    'U',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                  ),
+                ),
+                const Spacer(),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.list)),
+              ],
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Text(
-              'I',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
+        Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Text(
-              'U',
-              style: TextStyle(decoration: TextDecoration.underline),
-            ),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: onToggleFormatting,
+                icon: Text(
+                  'T',
+                  style: TextStyle(
+                    color: isFormattingActive
+                        ? const Color(0xFF007AFF)
+                        : Colors.grey,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const IconButton(
+                onPressed: null,
+                icon: Icon(Icons.phone_outlined),
+              ),
+              const IconButton(
+                onPressed: null,
+                icon: Icon(Icons.chat_bubble_outline),
+              ),
+            ],
           ),
-          const Spacer(),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.list)),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
