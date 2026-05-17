@@ -20,7 +20,7 @@ class ComposeScreen extends HookConsumerWidget {
         await ref
             .read(mailRepositoryProvider)
             .sendEmail(
-              recipientEmail: recipientEmail.text.trim(),
+              recipientEmails: [recipientEmail.text.trim()],
               subject: subject.text.trim(),
               body: body.text.trim(),
             );
