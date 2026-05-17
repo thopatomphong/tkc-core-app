@@ -21,19 +21,35 @@ class MailRepository {
   }
 
   Future<EmailMessage> sendEmail({
-    required List<String> recipientEmails,
+    required String recipientEmail,
     required String subject,
     required String body,
   }) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/email',
       data: <String, dynamic>{
-        'recipientEmails': recipientEmails,
+        'recipientEmail': recipientEmail,
         'subject': subject,
         'body': body,
       },
     );
     return EmailMessage.fromJson(res.data!);
+  }
+
+  Future<void> createSystemEmail({
+    required String recipientEmail,
+    required String subject,
+    required String body,
+  }) async {
+    await _dio.post<Map<String, dynamic>>(
+      '/email/system',
+      data: <String, dynamic>{
+        'recipientEmail': recipientEmail,
+        'subject': subject,
+        'body': body,
+      },
+      options: Options(extra: <String, dynamic>{'skipAuth': true}),
+    );
   }
 
   Future<Paginated<EmailMessage>> _getPage(

@@ -36,25 +36,48 @@ void main() {
     },
   );
 
-  test('sendEmail posts recipientEmails to /email', () async {
+  test('sendEmail posts recipientEmail to /email', () async {
     final dio = Dio(BaseOptions(baseUrl: 'http://test'));
     final adapter = DioAdapter(dio: dio);
     adapter.onPost(
       '/email',
       (server) => server.reply(201, _emailJson(7)),
       data: <String, dynamic>{
-        'recipientEmails': ['user2@mock.com'],
+        'recipientEmail': 'user2@mock.com',
         'subject': 'Hello',
         'body': 'Hi there!',
       },
     );
 
     final sent = await MailRepository(dio).sendEmail(
-      recipientEmails: ['user2@mock.com'],
+      recipientEmail: 'user2@mock.com',
       subject: 'Hello',
       body: 'Hi there!',
     );
 
     expect(sent.id, 7);
+  });
+
+  test('createSystemEmail posts to /email/system without auth', () async {
+    final dio = Dio(BaseOptions(baseUrl: 'http://test'));
+    final adapter = DioAdapter(dio: dio);
+    adapter.onPost(
+      '/email/system',
+      (server) => server.reply(201, <String, dynamic>{}),
+      data: <String, dynamic>{
+        'recipientEmail': 'user1@mock.com',
+        'subject': 'Test Push',
+        'body': 'This should trigger a push notification!',
+      },
+    );
+
+    await expectLater(
+      MailRepository(dio).createSystemEmail(
+        recipientEmail: 'user1@mock.com',
+        subject: 'Test Push',
+        body: 'This should trigger a push notification!',
+      ),
+      completes,
+    );
   });
 }

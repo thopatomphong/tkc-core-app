@@ -21,7 +21,7 @@ class ComposeScreen extends HookConsumerWidget {
         await ref
             .read(mailRepositoryProvider)
             .sendEmail(
-              recipientEmails: recipients.value,
+              recipientEmail: recipients.value.join(','),
               subject: subject.text.trim(),
               body: body.text.trim(),
             );
@@ -115,7 +115,9 @@ class _ComposeHeader extends StatelessWidget {
               backgroundColor: const Color(0xFFE53935),
               foregroundColor: Colors.white,
               disabledBackgroundColor: Colors.grey[300],
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             icon: const Icon(Icons.send, size: 16),
             label: const Text('Send'),
@@ -133,7 +135,7 @@ class _RecipientSection extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useTextEditingController();
-    
+
     void addRecipient(String value) {
       final email = value.trim().replaceAll(',', '').replaceAll(' ', '');
       if (email.isNotEmpty && !recipients.value.contains(email)) {
@@ -152,7 +154,10 @@ class _RecipientSection extends HookWidget {
         children: [
           const Padding(
             padding: EdgeInsets.only(top: 12),
-            child: Text('To:', style: TextStyle(color: Color(0xFF8E8E93), fontSize: 16)),
+            child: Text(
+              'To:',
+              style: TextStyle(color: Color(0xFF8E8E93), fontSize: 16),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -161,13 +166,17 @@ class _RecipientSection extends HookWidget {
               runSpacing: 4,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                ...recipients.value.map((email) => InputChip(
-                  label: Text(email),
-                  backgroundColor: const Color(0xFFEEF2F7),
-                  onDeleted: () {
-                    recipients.value = recipients.value.where((e) => e != email).toList();
-                  },
-                )),
+                ...recipients.value.map(
+                  (email) => InputChip(
+                    label: Text(email),
+                    backgroundColor: const Color(0xFFEEF2F7),
+                    onDeleted: () {
+                      recipients.value = recipients.value
+                          .where((e) => e != email)
+                          .toList();
+                    },
+                  ),
+                ),
                 IntrinsicWidth(
                   child: TextField(
                     controller: controller,
@@ -202,7 +211,10 @@ class _SubjectSection extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Text('Subject:', style: TextStyle(color: Color(0xFF8E8E93), fontSize: 16)),
+          const Text(
+            'Subject:',
+            style: TextStyle(color: Color(0xFF8E8E93), fontSize: 16),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
@@ -240,9 +252,27 @@ class _FormattingToolbar extends StatelessWidget {
             ),
             child: Row(
               children: [
-                IconButton(onPressed: () {}, icon: const Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
-                IconButton(onPressed: () {}, icon: const Text('I', style: TextStyle(fontStyle: FontStyle.italic))),
-                IconButton(onPressed: () {}, icon: const Text('U', style: TextStyle(decoration: TextDecoration.underline))),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Text(
+                    'B',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Text(
+                    'I',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Text(
+                    'U',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                  ),
+                ),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.list)),
               ],
@@ -261,14 +291,22 @@ class _FormattingToolbar extends StatelessWidget {
                 icon: Text(
                   'T',
                   style: TextStyle(
-                    color: isFormattingActive ? const Color(0xFF007AFF) : Colors.grey,
+                    color: isFormattingActive
+                        ? const Color(0xFF007AFF)
+                        : Colors.grey,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const IconButton(onPressed: null, icon: Icon(Icons.phone_outlined)),
-              const IconButton(onPressed: null, icon: Icon(Icons.chat_bubble_outline)),
+              const IconButton(
+                onPressed: null,
+                icon: Icon(Icons.phone_outlined),
+              ),
+              const IconButton(
+                onPressed: null,
+                icon: Icon(Icons.chat_bubble_outline),
+              ),
             ],
           ),
         ),

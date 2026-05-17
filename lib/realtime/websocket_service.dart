@@ -3,17 +3,20 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 
 typedef TokenLoader = Future<AuthTokens?> Function();
 typedef NewEmailCallback = void Function(int emailId);
+typedef OnlineUsersCallback = void Function(List<dynamic> data);
 
 class WebSocketService {
   WebSocketService({
     required this.wsUrl,
     required this.loadTokens,
     this.onNewEmail,
+    this.onOnlineUsers,
   });
 
   final String wsUrl;
   final TokenLoader loadTokens;
   final NewEmailCallback? onNewEmail;
+  final OnlineUsersCallback? onOnlineUsers;
 
   io.Socket? _socket;
 
@@ -33,6 +36,9 @@ class WebSocketService {
       ..on('newEmail', (dynamic data) {
         final emailId = data is Map ? data['id'] : null;
         if (emailId is int) onNewEmail?.call(emailId);
+      })
+      ..on('onlineUsers', (dynamic data) {
+        if (data is List) onOnlineUsers?.call(data);
       })
       ..connect();
     _socket = socket;
