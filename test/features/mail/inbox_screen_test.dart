@@ -1,6 +1,7 @@
 import 'package:core_app/features/mail/domain/entities/email_message.dart';
 import 'package:core_app/features/mail/presentation/providers/mail_providers.dart';
 import 'package:core_app/features/mail/presentation/screens/inbox_screen.dart';
+import 'package:core_app/features/mail/presentation/widgets/mail_list_view.dart';
 import 'package:core_app/models/paginated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -72,5 +73,62 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('detail'), findsOneWidget);
+  });
+
+  testWidgets('mail list paginates with next and previous buttons', (
+    tester,
+  ) async {
+    final pageOneEmail = EmailMessage(
+      id: 100,
+      senderId: 1,
+      senderUsername: 'system',
+      recipientId: 2,
+      recipientUsername: 'user1',
+      subject: 'Page one',
+      body: 'First page message.',
+      createdAt: DateTime(2026, 1, 1),
+    );
+    final pageTwoEmail = EmailMessage(
+      id: 101,
+      senderId: 1,
+      senderUsername: 'system',
+      recipientId: 2,
+      recipientUsername: 'user1',
+      subject: 'Page two',
+      body: 'Second page message.',
+      createdAt: DateTime(2026, 1, 2),
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          inboxProvider(page: 1).overrideWith(
+            (ref) async => Paginated(total: 11, items: [pageOneEmail]),
+          ),
+          inboxProvider(page: 2).overrideWith(
+            (ref) async => Paginated(total: 11, items: [pageTwoEmail]),
+          ),
+        ],
+        child: MaterialApp(
+          home: Scaffold(body: MailListView(provider: inboxProvider)),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Page one'), findsOneWidget);
+    expect(find.text('Page 1 of 2'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Next page'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Page two'), findsOneWidget);
+    expect(find.text('Page 2 of 2'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Previous page'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Page one'), findsOneWidget);
+    expect(find.text('Page 1 of 2'), findsOneWidget);
   });
 }

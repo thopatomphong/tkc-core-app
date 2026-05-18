@@ -5,43 +5,99 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MailListView extends ConsumerWidget {
+typedef MailPageProviderBuilder =
+    AutoDisposeFutureProvider<Paginated<EmailMessage>> Function({int page});
+
+class MailListView extends ConsumerStatefulWidget {
   const MailListView({
     super.key,
     required this.provider,
     this.isSentMode = false,
   });
 
-  final AutoDisposeFutureProvider<Paginated<EmailMessage>> provider;
+  final MailPageProviderBuilder provider;
   final bool isSentMode;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mailState = ref.watch(provider);
+  ConsumerState<MailListView> createState() => _MailListViewState();
+}
+
+class _MailListViewState extends ConsumerState<MailListView> {
+  static const int _pageSize = 10;
+
+  int _page = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    final pageProvider = widget.provider(page: _page);
+    final mailState = ref.watch(pageProvider);
 
     return mailState.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Center(child: Text('Error: $err')),
-      data: (page) => RefreshIndicator(
-        onRefresh: () async => ref.invalidate(provider),
-        child: ListView.separated(
-          itemCount: page.items.length,
-          separatorBuilder: (context, index) => const Divider(
-            height: 1,
-            indent: 86,
-            endIndent: 20,
-            color: Color(0xFFF1F3F9),
-          ),
-          itemBuilder: (context, index) {
-            final email = page.items[index];
-            return EmailTile(
-              email: email,
-              isSentMode: isSentMode,
-              onTap: () => context.go('/mail/${email.id}'),
-            );
-          },
-        ),
-      ),
+      data: (page) {
+        final pageCount = page.total <= 0
+            ? 1
+            : ((page.total + _pageSize - 1) ~/ _pageSize);
+
+        return Column(
+          children: [
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async => ref.invalidate(pageProvider),
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: page.items.length,
+                  separatorBuilder: (context, index) => const Divider(
+                    height: 1,
+                    indent: 86,
+                    endIndent: 20,
+                    color: Color(0xFFF1F3F9),
+                  ),
+                  itemBuilder: (context, index) {
+                    final email = page.items[index];
+                    return EmailTile(
+                      email: email,
+                      isSentMode: widget.isSentMode,
+                      onTap: () => context.go('/mail/${email.id}'),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton.outlined(
+                    tooltip: 'Previous page',
+                    onPressed: _page == 1
+                        ? null
+                        : () => setState(() {
+                            _page -= 1;
+                          }),
+                    icon: const Icon(Icons.chevron_left),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text('Page $_page of $pageCount'),
+                  ),
+                  IconButton.outlined(
+                    tooltip: 'Next page',
+                    onPressed: _page >= pageCount
+                        ? null
+                        : () => setState(() {
+                            _page += 1;
+                          }),
+                    icon: const Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
