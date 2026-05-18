@@ -110,7 +110,7 @@ void main() {
           ),
         ],
         child: MaterialApp(
-          home: Scaffold(body: MailListView(provider: inboxProvider)),
+          home: Scaffold(body: MailListView(provider: inboxProvider.call)),
         ),
       ),
     );

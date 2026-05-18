@@ -39,6 +39,17 @@ class _MailListViewState extends ConsumerState<MailListView> {
         final pageCount = page.total <= 0
             ? 1
             : ((page.total + _pageSize - 1) ~/ _pageSize);
+        final displayPage = _page > pageCount ? pageCount : _page;
+
+        if (_page > pageCount) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _page > pageCount) {
+              setState(() {
+                _page = pageCount;
+              });
+            }
+          });
+        }
 
         return Column(
           children: [
@@ -81,7 +92,7 @@ class _MailListViewState extends ConsumerState<MailListView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('Page $_page of $pageCount'),
+                    child: Text('Page $displayPage of $pageCount'),
                   ),
                   IconButton.outlined(
                     tooltip: 'Next page',

@@ -108,8 +108,11 @@ class _InboxScreenState extends ConsumerState<InboxScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  MailListView(provider: inboxProvider),
-                  MailListView(provider: sentMailProvider, isSentMode: true),
+                  MailListView(provider: inboxProvider.call),
+                  MailListView(
+                    provider: sentMailProvider.call,
+                    isSentMode: true,
+                  ),
                 ],
               ),
             ),
