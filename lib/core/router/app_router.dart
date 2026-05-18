@@ -54,7 +54,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => const InboxScreen(),
                 routes: [
                   GoRoute(
-                    path: 'mail/:id',
+                    path: ':id',
                     builder: (context, state) => EmailDetailScreen(
                       emailId: int.parse(state.pathParameters['id']!),
                     ),

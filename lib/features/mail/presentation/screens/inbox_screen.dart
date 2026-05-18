@@ -61,7 +61,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen>
                       radius: 22,
                       child: Icon(Icons.edit, color: Colors.white, size: 20),
                     ),
-                    onPressed: () => context.go('/mail/compose'),
+                    onPressed: () => context.go('/compose'),
                   ),
                 ],
               ),
