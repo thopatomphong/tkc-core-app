@@ -21,11 +21,24 @@ class OnlineUsers extends _$OnlineUsers {
 }
 
 @Riverpod(keepAlive: true)
+class NewEmailEvents extends _$NewEmailEvents {
+  @override
+  int? build() => null;
+
+  void received(int emailId) {
+    state = emailId;
+  }
+}
+
+@Riverpod(keepAlive: true)
 WebSocketService webSocketService(WebSocketServiceRef ref) {
   final service = WebSocketService(
     wsUrl: Env.wsUrl,
     loadTokens: ref.watch(tokenStorageProvider).readTokens,
-    onNewEmail: (_) => ref.invalidate(inboxProvider()),
+    onNewEmail: (emailId) {
+      ref.invalidate(inboxProvider());
+      ref.read(newEmailEventsProvider.notifier).received(emailId);
+    },
     onOnlineUsers: (data) {
       ref.read(onlineUsersProvider.notifier).updateUsers(data);
     },
