@@ -36,7 +36,7 @@ WebSocketService webSocketService(WebSocketServiceRef ref) {
     wsUrl: Env.wsUrl,
     loadTokens: ref.watch(tokenStorageProvider).readTokens,
     onNewEmail: (emailId) {
-      ref.invalidate(inboxProvider());
+      ref.invalidate(inboxProvider);
       ref.read(newEmailEventsProvider.notifier).received(emailId);
     },
     onOnlineUsers: (data) {
